@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 using UnityEngine.AI;
+using Mirror;
+using UnityEngine.InputSystem;
 
 namespace CraftTanks.Units 
 {
@@ -38,12 +39,12 @@ namespace CraftTanks.Units
         [ClientCallback]
         private void Update()
         {
-            if (!hasAuthority || !Input.GetKeyDown(KeyCode.Mouse1))
+            if (!hasAuthority || !Mouse.current.rightButton.IsPressed())
             {
                 return;
             }
 
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
