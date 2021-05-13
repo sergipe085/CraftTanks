@@ -10,7 +10,7 @@ namespace CraftTanks.Units
     public class UnitMovement : NetworkBehaviour
     {
         [Header("CORE")]
-        private NavMeshAgent agent = null;
+        [SerializeField] private NavMeshAgent agent = null;
         private Camera mainCamera;
 
         #region Server
@@ -32,7 +32,6 @@ namespace CraftTanks.Units
 
         public override void OnStartAuthority()
         {
-            agent = GetComponent<NavMeshAgent>();
             mainCamera = Camera.main;
         }
 
