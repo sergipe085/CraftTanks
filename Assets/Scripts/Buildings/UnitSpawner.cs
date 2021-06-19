@@ -1,20 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
+using Mirror;
 using UnityEngine.EventSystems;
 
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 {
-    [Header("CORE")]
     [SerializeField] private GameObject unitPrefab = null;
-    [SerializeField] private Transform unitySpawnerTransform = null;
 
     #region Server
 
     [Command]
     private void CmdSpawnUnit() {
-        GameObject unitInstance = Instantiate(unitPrefab, unitySpawnerTransform.position, unitySpawnerTransform.rotation);
+        GameObject unitInstance = Instantiate(unitPrefab, transform.position, Quaternion.identity);
         NetworkServer.Spawn(unitInstance, connectionToClient);
     }
 
