@@ -5,52 +5,21 @@ using UnityEngine.AI;
 using Mirror;
 using UnityEngine.InputSystem;
 
-namespace CraftTanks.Units 
+public class UnitMovement : NetworkBehaviour
 {
-    public class UnitMovement : NetworkBehaviour
-    {
-        [Header("CORE")]
-        [SerializeField] private NavMeshAgent agent = null;
-        private Camera mainCamera;
+    [Header("CORE")]
+    [SerializeField] private NavMeshAgent agent = null;
 
-        #region Server
+    #region Server
 
-        [Command]
-        private void CmdMove(Vector3 position)
-        {
-            if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
-            {
-                return;
-            }
-
-            agent.SetDestination(hit.position);
+    [Command]
+    public void CmdMove(Vector3 position) {
+        if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) {
+            return;
         }
 
-        #endregion
-
-        #region Client
-
-        public override void OnStartAuthority()
-        {
-            mainCamera = Camera.main;
-        }
-
-        [ClientCallback]
-        private void Update()
-        {
-            if (!hasAuthority || !Mouse.current.rightButton.IsPressed())
-            {
-                return;
-            }
-
-            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                CmdMove(hit.point);
-            }
-        }
-
-        #endregion
+        agent.SetDestination(hit.position);
     }
+
+    #endregion
 }
