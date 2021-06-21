@@ -35,10 +35,12 @@ public class UnitSelectionHandler : NetworkBehaviour
     }
 
     private void StartSelectionArea() {
-        foreach (Unit selectedUnit in SelectedUnits) {
-            selectedUnit.Deselect();
+        if (!Keyboard.current.leftShiftKey.isPressed) {
+            foreach (Unit selectedUnit in SelectedUnits) {
+                selectedUnit.Deselect();
+            }
+            SelectedUnits.Clear();   
         }
-        SelectedUnits.Clear();
 
         unitSelectionArea.gameObject.SetActive(true);
         startDragPos = Mouse.current.position.ReadValue();
@@ -81,6 +83,8 @@ public class UnitSelectionHandler : NetworkBehaviour
         Vector2 max = unitSelectionArea.anchoredPosition + (unitSelectionArea.sizeDelta / 2);
 
         foreach(Unit unit in player.GetMyUnits()) {
+            if (SelectedUnits.Contains(unit)) { continue; }
+
             Vector3 screenPos = mainCamera.WorldToScreenPoint(unit.transform.position);
 
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y) {
